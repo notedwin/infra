@@ -3,48 +3,13 @@ data "cloudflare_zone" "domain" {
 }
 
 resource "cloudflare_record" "domain" {
-  zone_id = data.cloudflare_zone.domain.id
-  name    = var.domain
-  value   = var.server_ip
-  type    = "A"
-  ttl     = 1
-  proxied = true
-}
-
-resource "cloudflare_record" "map" {
-  zone_id = data.cloudflare_zone.domain.id
-  name    = "map"
-  value   = var.server_ip
-  type    = "A"
-  ttl     = 1
-  proxied = true
-}
-
-resource "cloudflare_record" "restaurant" {
-  zone_id = data.cloudflare_zone.domain.id
-  name    = "restaurant"
-  value   = var.server_ip
-  type    = "A"
-  ttl     = 1
-  proxied = true
-}
-
-resource "cloudflare_record" "tutor" {
-  zone_id = data.cloudflare_zone.domain.id
-  name    = "tutor"
-  value   = var.server_ip
-  type    = "A"
-  ttl     = 1
-  proxied = true
-}
-
-resource "cloudflare_record" "www" {
-  zone_id = data.cloudflare_zone.domain.id
-  name    = "www"
-  value   = var.server_ip
-  type    = "A"
-  ttl     = 1
-  proxied = true
+  for_each = toset(var.subdomains)
+  zone_id  = data.cloudflare_zone.domain.id
+  name     = each.value
+  value    = var.server_ip
+  type     = "A"
+  ttl      = 1
+  proxied  = true
 }
 
 resource "tls_private_key" "pk" {
