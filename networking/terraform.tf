@@ -24,6 +24,7 @@ provider "aws" {
 provider "cloudflare" {
   email = var.CLOUDFLARE_EMAIL
   api_token = var.CLOUDFLARE_API_TOKEN
+  api_user_service_key = var.api_user_service_key
 }
 
 data "aws_caller_identity" "current" {}

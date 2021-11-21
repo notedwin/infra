@@ -6,6 +6,10 @@ variable "CLOUDFLARE_EMAIL" {
   default = "zamudio.e13@gmail.com"
 }
 
+variable "api_user_service_key" {
+  type = string
+}
+
 variable "application" {
   default = "infra-edwin"
   type = string
