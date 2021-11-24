@@ -44,23 +44,6 @@ resource "aws_apigatewayv2_api_mapping" "aws_gateway" {
   api_mapping_key = "test"
 }
 
-resource "aws_lambda_permission" "api_gw" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.test_lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_apigatewayv2_api.notedwin_main_apigw.execution_arn}/*/*"
-}
-
-resource "cloudflare_record" "site_cname" {
-  zone_id = data.cloudflare_zone.domain.id
-  name    = "aws.${var.domain}"
-  value   = trim(aws_apigatewayv2_api.notedwin_main_apigw.api_endpoint, "https://")
-  type    = "CNAME"
-  ttl     = 1
-  proxied = true
-}
-
 resource "aws_acm_certificate" "cert" {
   private_key      = tls_private_key.pk.private_key_pem
   certificate_body = cloudflare_origin_ca_certificate.origin_cert.certificate
@@ -93,30 +76,3 @@ MOz2U0OBSif3FTkhCgZWQKOOLo1P42jHC3ssUZAtVNXrCk3fw9/E15k8NPkBazZ6
 EOF
 }
 
-# security group to connect to elasticache
-resource "aws_security_group" "main-sg" {
-  name        = "main-vpc"
-  description = "main-vpc"
-  vpc_id      = aws_vpc.main.id
-
-  # allow ingress from anywhere
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [aws_vpc.main.cidr_block]
-  }
-
-  # allow egress to anywhere
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [aws_vpc.main.cidr_block]
-  }
-}
-
-# create vpc for resources
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-}

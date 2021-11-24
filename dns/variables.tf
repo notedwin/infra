@@ -34,7 +34,7 @@ variable "domain" {
 }
 
 variable "subdomains" {
-  default = ["www", "tutor", "map","restaurant","notedwin.tech"]
+  default = ["www", "tutor", "map","restaurant","notedwin.tech", "jenkins"]
   type = list
 }
 

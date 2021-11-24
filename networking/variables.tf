@@ -34,7 +34,7 @@ variable "domain" {
 }
 
 variable "subdomains" {
-  default = ["www", "tutor", "map","restaurant","notedwin.tech"]
+  default = ["www", "tutor", "map","restaurant","notedwin.tech", "jenkins"]
   type = list
 }
 
@@ -43,3 +43,19 @@ variable "server_ip" {
   type = string
 }
 
+variable "vpc_cidr" {
+  default = "10.0.0.0/16"
+}
+
+variable "public_subnet_cidr" {
+  default = "10.0.0.0/24"
+}
+
+variable "private_subnet_cidr" {
+  default = "10.0.1.0/24"
+}
+
+variable "dist" {
+  default = "~/notedwin/projects/infrastructure/attack_map/lambda-dist/attack_map/attack_map.zip"
+  type = string
+}
