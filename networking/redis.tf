@@ -13,22 +13,3 @@ resource "aws_elasticache_subnet_group" "default" {
   name        = "subnet-group-redis"
   subnet_ids  = [aws_subnet.private-subnet.id]
 }
-
-
-resource "aws_security_group" "redis_sg" {
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-      cidr_blocks = [aws_subnet.private-subnet.cidr_block]
-      from_port   = 6379
-      to_port     = 6379
-      protocol    = "tcp"
-  }
-
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-  }
-}

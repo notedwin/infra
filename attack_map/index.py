@@ -4,10 +4,11 @@ import redis
 import os
 import logging
 import requests
-import datetime
+import time
 
 redis_url = os.getenv('REDIS_URL', 'None')
-r = redis.from_url(redis_url)
+
+r = redis.from_url(redis_url, decode_responses=True)
 
 API = "http://ip-api.com/json/"
 
@@ -19,11 +20,15 @@ def populate_redis(user,ip):
         else:
             data = requests.get(API + ip).json()
             print(data)
-            r.hmset(ip,{"lon", data["lon"], "lat", data["lat"]})
+            r.hmset(ip,{"lon": data["lon"], "lat": data["lat"]})
         
-        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        r.hmset(time,{"user", user, "ip", ip, "lon", data["lon"], "lat", data["lat"]})
-        r.zadd("hackers",time,time)
+        t = time.time()
+        print(t)
+        r.hmset(t,{"user": user, "ip": ip, "lon": data["lon"], "lat": data["lat"]})
+        print(r.hgetall(t))
+        r.zadd("hackers",{"time": t})
+        for hacker in r.zrangebyscore("hackers", 0, time.time()):
+            print(hacker)
     except Exception as e:
         print(e)
 

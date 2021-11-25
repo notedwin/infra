@@ -41,7 +41,7 @@ resource "aws_apigatewayv2_api_mapping" "aws_gateway" {
   api_id          = aws_apigatewayv2_api.notedwin_main_apigw.id
   domain_name     = aws_apigatewayv2_domain_name.notedwin_apigw_domain.id
   stage           = aws_apigatewayv2_stage.notedwin_main_api.id
-  api_mapping_key = "test"
+  api_mapping_key = "data"
 }
 
 resource "aws_acm_certificate" "cert" {
