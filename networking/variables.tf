@@ -15,7 +15,7 @@ variable "lambda_memory" {
 }
 
 variable "lambda_timeout" {
-  default = 60
+  default = 300
 }
 
 variable "application" {
