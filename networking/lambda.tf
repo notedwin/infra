@@ -3,13 +3,13 @@ resource "aws_lambda_function" "test_lambda" {
   function_name    = "test_lambda"
   role             = aws_iam_role.iam_for_lambda_tf.arn
   handler          = "index.handler"
-  source_code_hash = "${filebase64sha256("${var.dist}")}"
+  source_code_hash = filebase64sha256("${var.dist}")
   runtime          = "python3.8"
   memory_size      = var.lambda_memory
   timeout          = var.lambda_timeout
 
   vpc_config {
-    subnet_ids = [aws_subnet.private-subnet.id, aws_subnet.public-subnet.id]
+    subnet_ids         = [aws_subnet.private-subnet.id, aws_subnet.public-subnet.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
 
@@ -68,12 +68,12 @@ EOF
 # }
 
 resource "aws_iam_role_policy_attachment" "vpc" {
-  role=aws_iam_role.iam_for_lambda_tf.name
+  role       = aws_iam_role.iam_for_lambda_tf.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 resource "aws_iam_role_policy_attachment" "full" {
-  role=aws_iam_role.iam_for_lambda_tf.name
+  role       = aws_iam_role.iam_for_lambda_tf.name
   policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
 }
 

@@ -34,11 +34,12 @@ resource "cloudflare_origin_ca_certificate" "origin_cert" {
   requested_validity = 7
 }
 
-resource "cloudflare_record" "site_cname" {
-  zone_id = data.cloudflare_zone.domain.id
-  name    = "aws.${var.domain}"
-  value   = trim(aws_apigatewayv2_api.notedwin_main_apigw.api_endpoint, "https://")
-  type    = "CNAME"
-  ttl     = 1
-  proxied = true
+# create CNAME record for cloudfront
+resource "cloudflare_record" "cname" {
+  zone_id  = data.cloudflare_zone.domain.id
+  name     = "map.${var.domain}"
+  value    = aws_cloudfront_distribution.distribution.domain_name
+  type     = "CNAME"
+  ttl      = 1
+  proxied  = true
 }

@@ -2,7 +2,7 @@ variable "CLOUDFLARE_API_TOKEN" {
   type = string
 }
 variable "CLOUDFLARE_EMAIL" {
-  type = string
+  type    = string
   default = "zamudio.e13@gmail.com"
 }
 
@@ -20,27 +20,27 @@ variable "lambda_timeout" {
 
 variable "application" {
   default = "infra-edwin"
-  type = string
+  type    = string
 }
 
 variable "aws_region" {
   default = "us-east-2"
-  type = string
+  type    = string
 }
 
 variable "domain" {
   default = "notedwin.tech"
-  type = string
+  type    = string
 }
 
 variable "subdomains" {
-  default = ["www", "tutor", "map","restaurant","notedwin.tech", "jenkins"]
-  type = list
+  default = ["www", "tutor", "restaurant", "notedwin.tech", "jenkins"]
+  type    = list(any)
 }
 
 variable "server_ip" {
   default = "73.75.61.15"
-  type = string
+  type    = string
 }
 
 variable "vpc_cidr" {
@@ -57,5 +57,10 @@ variable "private_subnet_cidr" {
 
 variable "dist" {
   default = "~/notedwin/projects/infrastructure/attack_map/lambda-dist/attack_map/attack_map.zip"
-  type = string
+  type    = string
+}
+
+variable "html_file" {
+  default = "~/notedwin/projects/infrastructure/attack_map/index.html"
+  type    = string
 }
