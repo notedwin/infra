@@ -64,3 +64,8 @@ variable "html_file" {
   default = "~/notedwin/projects/infrastructure/attack_map/index.html"
   type    = string
 }
+
+variable "nat_ami" {
+  default = "ami-0f07f5dc8c79ceb1e"
+  type = string
+}

@@ -43,3 +43,12 @@ resource "cloudflare_record" "cname" {
   ttl      = 1
   proxied  = true
 }
+
+resource "cloudflare_record" "site_cname" {
+  zone_id = data.cloudflare_zone.domain.id
+  name    = "aws.${var.domain}"
+  value   = trim(aws_apigatewayv2_api.notedwin_main_apigw.api_endpoint, "https://")
+  type    = "CNAME"
+  ttl     = 1
+  proxied = true
+}
