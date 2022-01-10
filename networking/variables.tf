@@ -39,7 +39,7 @@ variable "subdomains" {
 }
 
 variable "server_ip" {
-  default = "73.75.61.15"
+  default = "76.76.21.21"
   type    = string
 }
 
@@ -57,6 +57,11 @@ variable "private_subnet_cidr" {
 
 variable "dist" {
   default = "~/notedwin/projects/infrastructure/attack_map/lambda-dist/attack_map/attack_map.zip"
+  type    = string
+}
+
+variable "rust_dist" {
+  default = "~/notedwin/projects/aoc/attack-map/target/x86_64-unknown-linux-gnu/release/lambda.zip"
   type    = string
 }
 

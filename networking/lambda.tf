@@ -1,10 +1,39 @@
 resource "aws_lambda_function" "test_lambda" {
   filename         = var.dist
-  function_name    = "test_lambda"
+  function_name    = "python_attack_map"
   role             = aws_iam_role.iam_for_lambda_tf.arn
   handler          = "index.handler"
   source_code_hash = filebase64sha256("${var.dist}")
   runtime          = "python3.8"
+  memory_size      = var.lambda_memory
+  timeout          = var.lambda_timeout
+
+  vpc_config {
+    subnet_ids         = [aws_subnet.private-subnet.id, aws_subnet.public-subnet.id]
+    security_group_ids = [aws_security_group.lambda_sg.id]
+  }
+
+  environment {
+    variables = { 
+      REDIS_URL = "redis://${aws_elasticache_cluster.redis.cache_nodes.0.address}:${aws_elasticache_cluster.redis.cache_nodes.0.port}" 
+      RUST_BACKTRACE = "1"
+      }
+  }
+
+  tracing_config {
+    mode = "Active"
+  }
+
+}
+
+
+resource "aws_lambda_function" "rust_lambda" {
+  filename         = var.rust_dist
+  function_name    = "rust_attack_map"
+  role             = aws_iam_role.iam_for_lambda_tf.arn
+  handler          = "main"
+  source_code_hash = filebase64sha256("${var.rust_dist}")
+  runtime          = "provided.a12"
   memory_size      = var.lambda_memory
   timeout          = var.lambda_timeout
 
@@ -81,6 +110,15 @@ resource "aws_lambda_permission" "api_gw" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.test_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.notedwin_main_apigw.execution_arn}/*/*"
+}
+
+
+resource "aws_lambda_permission" "api_gw" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.rust_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.notedwin_main_apigw.execution_arn}/*/*"
 }

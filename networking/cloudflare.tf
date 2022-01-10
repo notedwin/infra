@@ -3,14 +3,39 @@ data "cloudflare_zone" "domain" {
 }
 
 resource "cloudflare_record" "domain" {
-  for_each = toset(var.subdomains)
   zone_id  = data.cloudflare_zone.domain.id
-  name     = each.value
+  name     = "@"
   value    = var.server_ip
   type     = "A"
   ttl      = 1
   proxied  = true
 }
+
+//redirect all subdomains except map
+resource "cloudflare_record" "redirect" {
+  zone_id = data.cloudflare_zone.domain.id
+  name    = "*"
+  type    = "CNAME"
+  value   = "${var.domain}"
+  ttl     = 1
+}
+
+# resource "cloudflare_page_rule" "redirect" {
+#   zone_id = data.cloudflare_zone.domain.id
+#   target = "*.${var.domain}/*"
+#   priority = 2
+#   status = "active"
+#   actions {
+#     forwarding_url {
+#       url = "https://${var.domain}"
+#       status_code = "302"
+#     }
+#   }
+# }
+
+//redirect all subdomains except map
+
+
 
 resource "tls_private_key" "pk" {
   algorithm = "RSA"

@@ -1,5 +1,4 @@
 import json
-import boto3
 import redis
 import os
 import logging
@@ -47,16 +46,15 @@ def populate_redis(user, ip):
 def parseData(data):
     # rsyslog returns a space infront of data since its coming from part of a log.
     data_arr = list(filter(None, str(data).split(' ')))
-    
     print(f"data: {data_arr}")
-    if (data_arr[3] == "root" or data_arr[3] == "pi"):
+    if data_arr[3] in ["root", "pi", "ubuntu"]:
         user = data_arr[3]
         ip = data_arr[5]
-        populate_redis(user, ip)
     else:
         user = data_arr[5]
         ip = data_arr[7]
-        populate_redis(user, ip)
+
+    populate_redis(user, ip)
 
 
 def handler(event, context):
