@@ -28,7 +28,7 @@ def populate_redis(user, ip):
         if r.exists(ip):
             data = r.hgetall(ip)
         else:
-            data = requests.get(API + ip).json()
+            data = requests.get(API + ip, timeout=6).json()
             r.hmset(ip, {"lon": data["lon"], "lat": data["lat"]})
         # print(data)
         t = time.time()
