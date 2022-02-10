@@ -28,7 +28,7 @@ def populate_redis(user, ip):
         if r.exists(ip):
             data = r.hgetall(ip)
         else:
-            data = requests.get(API + ip, timeout=6).json()
+            data = requests.get(API + ip, timeout=12).json()
             r.hmset(ip, {"lon": data["lon"], "lat": data["lat"]})
         # print(data)
         t = time.time()
@@ -68,7 +68,8 @@ def handler(event, context):
         }
 
     elif method == "POST":
-        message = json.loads(event["body"])["message"]
+        message = event["body"]
+        print(message)
         parseData(message)
         return {
             "statusCode": 200,
