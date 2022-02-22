@@ -7,7 +7,7 @@ resource "aws_lambda_function" "test_lambda" {
   runtime          = "python3.8"
   memory_size      = var.lambda_memory
   timeout          = var.lambda_timeout
-  #reserved_concurrent_executions = 0
+  reserved_concurrent_executions = 0
 
   vpc_config {
     subnet_ids         = [aws_subnet.private-subnet.id, aws_subnet.public-subnet.id]
