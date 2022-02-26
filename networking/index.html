@@ -129,13 +129,12 @@
         }
         var arcs = [];
         var bubbles = [];
-
         //basic map config with custom fills, mercator projection
         async function demo() {
 
             var loc = await getData().then(function (data) {
                 console.log(data.list);
-                return data.list;
+                return JSON.parse(data.list);
             });
 
             var lineFadeTime = 2000;

@@ -31,7 +31,7 @@ resource "aws_apigatewayv2_integration" "notedwin" {
   integration_type       = "AWS_PROXY"
   connection_type        = "INTERNET"
   integration_method     = "POST"
-  integration_uri        = aws_lambda_function.test_lambda.invoke_arn
+  integration_uri        = aws_lambda_function.rust_async_lambda.invoke_arn
   payload_format_version = "2.0"
   timeout_milliseconds   = "30000"
   passthrough_behavior   = "WHEN_NO_MATCH"

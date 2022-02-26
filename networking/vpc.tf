@@ -16,6 +16,14 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 }
 
+resource "aws_eip" "main" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "main" {
+  subnet_id     = aws_subnet.public-subnet.id
+  allocation_id = aws_eip.main.id
+}
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
@@ -43,8 +51,8 @@ resource "aws_route_table_association" "private" {
 
 resource "aws_route" "private" {
   route_table_id         = aws_route_table.private.id
-  destination_cidr_block = aws_subnet.public-subnet.cidr_block
-  network_interface_id = aws_instance.nat.primary_network_interface_id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.main.id
 }
 
 resource "aws_network_acl" "main" {
@@ -85,9 +93,9 @@ resource "aws_security_group" "nat" {
   vpc_id      = aws_vpc.main.id
 
   egress {
-    from_port   = 8000
-    to_port     = 8000
-    protocol    = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 

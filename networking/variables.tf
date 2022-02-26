@@ -61,7 +61,7 @@ variable "dist" {
 }
 
 variable "rust_dist" {
-  default = "~/notedwin/projects/aoc/attack-map/target/x86_64-unknown-linux-gnu/release/lambda.zip"
+  default = "~/notedwin/projects/infrastructure/rust-attack-map/target/x86_64-unknown-linux-gnu/release/lambda.zip"
   type    = string
 }
 
