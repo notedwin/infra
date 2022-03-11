@@ -16,7 +16,7 @@ def pull_hackers():
     ret = []
     t = time.time() - (60*60*5)
     for hacker in r.zrangebyscore("hackers", t, time.time()):
-        data = r.hgetall(hacker)
+        data = r.get(hacker)
         data["time"] = time.strftime('%H:%M:%S', time.localtime(float(hacker)))
         ret.append(data)
     return ret
@@ -26,7 +26,7 @@ def populate_redis(user, ip):
     # print(user,ip)
     try:
         if r.exists(ip):
-            data = r.hgetall(ip)
+            data = r.get(ip)
         else:
             data = requests.get(API + ip, timeout=12).json()
             r.hmset(ip, {"lon": data["lon"], "lat": data["lat"]})
@@ -64,7 +64,7 @@ def handler(event, context):
         hacker = pull_hackers()
         return {
             "statusCode": 200,
-            "body": json.dumps({"list": hacker})
+            "body": json.dumps({"list": str(hacker)})
         }
 
     elif method == "POST":
