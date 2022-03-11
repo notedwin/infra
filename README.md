@@ -1,13 +1,19 @@
 # Infrastruture for Edwin's Websites
 
-## Introduction
+Deploying:
+```bash
+# I kept my secrets in a file and then just used the var-file to pass it to terraform.
 
-Given a custom domain and a website you want to run, you need to set up a DNS and a server.
+Terraform init
+Terraform plan
+Terraform apply
 
-Create Cloudflare account and get a domain name (or import domain).
-Create API key for Cloudflare. (Expiry Jan 1st 2022)
+# For debugging
+Terraform state list
 
-## Environment Variables
+```
+
+## Variables in var-file or environment variables
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION
